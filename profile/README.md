@@ -44,3 +44,13 @@ These repositories are not retirement candidates merely because generated names 
 Names previously documented as repositories but absent from the authenticated installation inventory are omitted rather than represented as live coverage.
 
 Pull-request checks remain deterministic and credential-free. Private cross-organization materialization requires approved short-lived GitHub App installation tokens, with no PAT or persistent-token fallback.
+
+<!-- org-project-routing:start -->
+## Planning and delivery
+
+- [GitHub Project: shared-auth-test-project](https://github.com/orgs/shared-auth-test/projects/1)
+- [Linear planning project](https://linear.app/denman/project/githubcomshared-auth-test-b01af6233a25)
+- [Detailed project-routing contract](../docs/PROJECTS.md)
+
+GitHub owns code and delivery evidence; Linear owns planning and dependencies. The linked organization Project provides the cross-repository execution view.
+<!-- org-project-routing:end -->
