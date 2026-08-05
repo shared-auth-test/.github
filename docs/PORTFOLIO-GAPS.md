@@ -7,15 +7,17 @@ Canonical source: `zed-pkg-test/zed-pkg-e2e` live 341-repository manifest
 
 The live portfolio declares **19 specialized repositories plus one public `.github` governance repository** for `shared-auth-test`: **20 canonical repositories** in total.
 
-The remote organization currently contains **5 repositories**, leaving a **count gap of 15**. The present repositories are:
+An authenticated organization listing returns **7 repositories**, leaving a **count gap of 13**. The present repositories are:
 
 - `.github`
 - `lib-clients-consumer-matrix`
 - `oidc-oauth-contract`
+- `oidc-provider-e2e`
 - `passwordless-passkeys`
+- `server-api-contract-e2e`
 - `session-revocation`
 
-The previous six-repository gap list came from an older fleet snapshot and is superseded by the live manifest. The exact missing name set must be generated from the deterministic canonical index proposed in `zed-pkg-test/zed-pkg-e2e#94`; it must not be guessed from stale exports.
+The earlier 5/20 and six-repository gap statements came from public-search visibility and a superseded fleet snapshot. The exact missing name set must be generated from the deterministic canonical index proposed in `zed-pkg-test/zed-pkg-e2e#94`; it must not be guessed from stale exports.
 
 ## Required coverage
 
