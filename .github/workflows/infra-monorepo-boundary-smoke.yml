@@ -1,0 +1,87 @@
+name: infra-monorepo-boundary-smoke
+
+on:
+  pull_request:
+    paths:
+      - scripts/check_infra_monorepo_boundary.py
+      - .github/workflows/infra-monorepo-boundary-smoke.yml
+  push:
+    branches: [main]
+    paths:
+      - scripts/check_infra_monorepo_boundary.py
+      - .github/workflows/infra-monorepo-boundary-smoke.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: infra-boundary-smoke-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out policy repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Exercise clean and adversarial manifests
+        shell: bash
+        run: |
+          set -euo pipefail
+          work="$(mktemp -d)"
+          trap 'rm -rf "$work"' EXIT
+
+          cat >"$work/clean.gitmodules" <<'EOF'
+          [submodule "apps/shared-auth-server.rs"]
+            path = apps/shared-auth-server.rs
+            url = git@github.com:shared-auth/shared-auth-server.rs.git
+          EOF
+          python3 scripts/check_infra_monorepo_boundary.py \
+            "$work/clean.gitmodules" \
+            --repository shared-auth-test/shared-auth-monorepo
+
+          cat >"$work/alias.gitmodules" <<'EOF'
+          [submodule "apps/deployment"]
+            path = apps/deployment
+            url = https://github.com/shared-auth/shared-auth-infra.git
+          EOF
+          set +e
+          python3 scripts/check_infra_monorepo_boundary.py \
+            "$work/alias.gitmodules" \
+            --repository shared-auth-test/shared-auth-monorepo
+          alias_status=$?
+          set -e
+          test "$alias_status" -eq 2
+
+          cat >"$work/dotted.gitmodules" <<'EOF'
+          [submodule "deploy/shared-auth.infra"]
+            path = deploy/shared-auth.infra
+            url = ../shared-auth.infra.git
+          EOF
+          set +e
+          python3 scripts/check_infra_monorepo_boundary.py \
+            "$work/dotted.gitmodules" \
+            --repository shared-auth-test/shared-auth-monorepo \
+            --json >"$work/report.json"
+          dotted_status=$?
+          set -e
+          test "$dotted_status" -eq 2
+          python3 - "$work/report.json" <<'PY'
+          import json
+          import pathlib
+          import sys
+
+          report = json.loads(pathlib.Path(sys.argv[1]).read_text())
+          assert report["policy_id"] == "repo-boundary/infra-not-app-submodule/v1"
+          assert report["applicable"] is True
+          assert len(report["violations"]) == 1
+          assert report["violations"][0]["repository_name"] == "shared-auth.infra"
+          PY
+
+          python3 scripts/check_infra_monorepo_boundary.py \
+            "$work/alias.gitmodules" \
+            --repository shared-auth-test/shared-auth-infra
