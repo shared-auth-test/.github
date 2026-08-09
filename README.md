@@ -5,7 +5,7 @@ Organization-wide community health, privacy, and reusable workflow policy for Sh
 The authenticated live inventory contains **23 test repositories** plus this governance repository:
 
 - **19 generated specialized harnesses** for API, OAuth/OIDC, WebAuthn, recovery, session rotation, token reuse, JWKS, tenant isolation, SDKs, offline sync, NATS/DLQ, audit redaction, browsers, and MCP.
-- **4 legacy independent harnesses**: `lib-clients-consumer-matrix`, `oidc-oauth-contract`, `passwordless-passkeys`, and `session-revocation`.
+- Private repository details are intentionally withheld from this public document.
 
 The four legacy repositories remain first-class until a semantic behavior/history comparison proves that every unique invariant has an explicit destination. Names previously documented but absent from the authenticated repository inventory are not represented as live repositories.
 
@@ -43,3 +43,15 @@ GitHub can use supported community-health files from a public organization `.git
 
 Generated managed-policy version: `2026-08-08`.
 <!-- ore-org-baseline:end -->
+
+<!-- BEGIN MANAGED REPOSITORY RELATIONSHIPS v1 -->
+## Repository relationship registry
+
+`shared-auth-test` declares repository roles, dependency edges, cross-organization capabilities, deployment ownership, and the git-submodule/Zed-package contract:
+
+- [Human-readable map](architecture/REPOSITORY_RELATIONSHIPS.md)
+- [Machine-readable manifest](architecture/repository-relationships.json)
+- [JSON Schema](architecture/repository-relationships.schema.json)
+
+The public registry withholds private repository names and edges.
+<!-- END MANAGED REPOSITORY RELATIONSHIPS v1 -->
