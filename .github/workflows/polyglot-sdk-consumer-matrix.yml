@@ -29,4 +29,4 @@ jobs:
       lib_path: shared-auth-lib
       lib_dependency: shared-auth/shared-auth-lib
     secrets:
-      read_token: ${{ secrets.TEST_ORG_READ_TOKEN }}
+      read_token: ${{ secrets.TEST_FLEET_READ_TOKEN || secrets.TEST_ORG_READ_TOKEN || github.token }}
